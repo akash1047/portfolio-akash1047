@@ -11,7 +11,6 @@ export function ThemeToggle({ className }: { className?: string }) {
   }, [])
 
   const toggle = () => {
-    // Briefly enable broad transitions for smooth theme switch
     document.documentElement.classList.add('theme-transitioning')
     const isDark = document.documentElement.classList.toggle('dark')
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
@@ -22,13 +21,10 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       onClick={toggle}
-      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className={cn(
-        'font-mono text-xs text-muted-foreground hover:text-primary transition-colors',
-        className
-      )}
+      aria-label={dark ? 'Switch to light desktop' : 'Switch to dark desktop'}
+      className={cn('win-btn text-[11px] min-w-0 px-2 py-0.5', className)}
     >
-      {dark ? '[light]' : '[dark]'}
+      {dark ? 'Teal Desktop' : 'Navy Desktop'}
     </button>
   )
 }

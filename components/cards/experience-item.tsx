@@ -1,5 +1,4 @@
 import type { ExperienceItem } from '@/types/resume'
-import { cn } from '@/lib/utils'
 
 interface ExperienceItemProps {
   item: ExperienceItem
@@ -8,30 +7,26 @@ interface ExperienceItemProps {
 
 export function ExperienceCard({ item, isLast = false }: ExperienceItemProps) {
   return (
-    <div className="relative flex gap-6">
-      {/* Timeline line + dot */}
-      <div className="flex flex-col items-center">
-        <div className="w-2.5 h-2.5 rounded-full bg-primary mt-1.5 shrink-0 shadow-[0_0_8px_rgba(0,255,65,0.6)]" />
-        {!isLast && <div className="w-px flex-1 bg-border mt-2" />}
+    <div className={`win-raised p-3 bg-[#d4d0c8] mb-3 ${isLast ? '' : ''}`}>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
+        <h3 className="font-bold text-[11px] text-[#000000]">{item.title}</h3>
+        <span
+          className="text-[11px] font-bold"
+          style={{ color: '#000080' }}
+        >
+          {item.company}
+        </span>
+        <span className="text-[10px] text-[#606060]">{item.location}</span>
       </div>
-
-      {/* Content */}
-      <div className={cn('pb-12', isLast && 'pb-0')}>
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-          <h3 className="font-semibold text-foreground">{item.title}</h3>
-          <span className="text-primary font-mono text-sm">{item.company}</span>
-          <span className="text-muted-foreground text-xs">{item.location}</span>
-        </div>
-        <p className="font-mono text-xs text-muted-foreground mb-4">{item.period}</p>
-        <ul className="space-y-2">
-          {item.bullets.map((bullet, i) => (
-            <li key={i} className="flex gap-3 text-sm text-foreground/75 leading-relaxed">
-              <span className="text-primary/60 font-mono shrink-0 mt-0.5">▸</span>
-              {bullet}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <p className="text-[10px] text-[#606060] mb-2 font-mono">{item.period}</p>
+      <ul className="space-y-1">
+        {item.bullets.map((bullet, i) => (
+          <li key={i} className="flex gap-2 text-[11px] text-[#000000] leading-relaxed">
+            <span className="shrink-0" style={{ color: '#000080' }} aria-hidden="true">&#x25BA;</span>
+            {bullet}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
