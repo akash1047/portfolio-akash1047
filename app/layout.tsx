@@ -1,16 +1,19 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Tahoma } from 'next/font/google'
+import { Courier_Prime } from 'next/font/google'
 import './globals.css'
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const tahoma = Tahoma({
+  variable: '--font-tahoma',
   subsets: ['latin'],
+  weight: ['400', '700'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const courierPrime = Courier_Prime({
+  variable: '--font-courier',
   subsets: ['latin'],
+  weight: ['400', '700'],
 })
 
 export const metadata: Metadata = {
@@ -41,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${tahoma.variable} ${courierPrime.variable} h-full`}
     >
       {/* Inline script runs before paint — prevents flash of wrong theme */}
       <head>
@@ -51,7 +54,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body
+        className="min-h-full flex flex-col font-sans"
+        style={{ fontFamily: "Tahoma, 'MS Sans Serif', Arial, sans-serif", fontSize: '11px' }}
+      >
+        {children}
+      </body>
     </html>
   )
 }

@@ -51,7 +51,7 @@ export function SocialLinks({ links, className, size = 'md' }: SocialLinksProps)
   const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'
 
   return (
-    <div className={cn('flex items-center gap-4', className)}>
+    <div className={cn('flex items-center gap-2', className)}>
       {links.map((link) => {
         const Icon = iconMap[link.type]
         return (
@@ -61,9 +61,10 @@ export function SocialLinks({ links, className, size = 'md' }: SocialLinksProps)
             target={link.type !== 'phone' ? '_blank' : undefined}
             rel={link.type !== 'phone' ? 'noopener noreferrer' : undefined}
             aria-label={link.name}
-            className="text-muted-foreground hover:text-primary transition-colors duration-200"
+            className="win-btn text-[11px] min-w-0 px-2 py-0.5 flex items-center gap-1.5 text-[#000000] hover:bg-[#e8e4d8]"
           >
             <Icon className={iconSize} />
+            <span className="sr-only">{link.name}</span>
           </a>
         )
       })}

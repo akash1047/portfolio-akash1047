@@ -1,95 +1,147 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from '@/lib/constants'
-import { ThemeToggle } from '@/components/shared/theme-toggle'
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
+  const [time, setTime] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const tick = () => {
+      const now = new Date()
+      setTime(
+        now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        })
+      )
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
   }, [])
 
   return (
-    <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'bg-background/85 backdrop-blur-md border-b border-border/60'
-          : 'bg-transparent'
-      )}
-    >
-      <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <a
-          href="#hero"
-          className="font-mono text-sm font-bold hover:text-primary transition-colors"
-        >
-          <span className="text-primary/60 select-none">$ </span>
-          akash1047
-          <span className="animate-pulse text-primary">_</span>
-        </a>
-
-        {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-8">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                className="font-mono text-xs text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Desktop: theme toggle */}
-        <ThemeToggle className="hidden md:block" />
-
-        {/* Mobile: theme + menu */}
-        <div className="flex md:hidden items-center gap-3">
-          <ThemeToggle />
-          <button
-            className="font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
-            onClick={() => setMenuOpen((prev) => !prev)}
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? '[close]' : '[menu]'}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile dropdown */}
-      <div
-        className={cn(
-          'md:hidden overflow-hidden transition-all duration-300',
-          menuOpen ? 'max-h-64 border-b border-border/60' : 'max-h-0'
-        )}
+    <>
+      {/* ── Windows 2000 Taskbar ── */}
+      <header
+        className="fixed bottom-0 left-0 right-0 z-50 win-taskbar"
+        style={{ borderTop: '2px solid #ffffff' }}
+        role="banner"
       >
-        <div className="bg-background/95 backdrop-blur-md">
-          <ul className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
+        {/* Start button */}
+        <button
+          className="win-start-btn flex items-center gap-1.5 shrink-0"
+          onClick={() => setMenuOpen((p) => !p)}
+          aria-label="Open navigation menu"
+          aria-expanded={menuOpen}
+        >
+          {/* Windows flag icon (4 squares) */}
+          <span className="grid grid-cols-2 gap-px w-3.5 h-3.5 shrink-0" aria-hidden="true">
+            <span className="bg-red-600 block" />
+            <span className="bg-green-600 block" />
+            <span className="bg-blue-700 block" />
+            <span className="bg-yellow-500 block" />
+          </span>
+          <span className="font-bold text-[11px]">Start</span>
+        </button>
+
+        {/* Separator */}
+        <div className="h-5 w-px" style={{ borderLeft: '1px solid #808080', borderRight: '1px solid #ffffff' }} />
+
+        {/* Quick launch nav items as taskbar buttons */}
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-1 flex-1">
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="win-btn text-[11px] min-w-0 px-3 py-0.5 h-[22px] leading-none"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* System tray */}
+        <div
+          className="ml-auto flex items-center gap-1 pl-2"
+          style={{
+            borderTop: '1px solid #808080',
+            borderLeft: '1px solid #808080',
+            borderRight: '1px solid #ffffff',
+            borderBottom: '1px solid #ffffff',
+            padding: '2px 6px',
+          }}
+        >
+          {/* Network icon */}
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="1" y="10" width="4" height="4" fill="#000080" />
+            <rect x="6" y="7" width="4" height="7" fill="#000080" />
+            <rect x="11" y="4" width="4" height="10" fill="#000080" />
+          </svg>
+          <span className="text-[11px] font-sans" aria-live="polite">{time}</span>
+        </div>
+      </header>
+
+      {/* ── Start Menu (mobile) ── */}
+      {menuOpen && (
+        <div
+          className="fixed bottom-[30px] left-0 z-50 win-window"
+          style={{ width: 200, minHeight: 120 }}
+          role="dialog"
+          aria-label="Start menu"
+        >
+          {/* Blue side bar */}
+          <div className="flex h-full">
+            <div
+              className="w-7 flex items-end justify-center pb-3"
+              style={{
+                background: 'linear-gradient(to top, #000080, #1084d0)',
+                writingMode: 'vertical-rl',
+                transform: 'rotate(180deg)',
+              }}
+            >
+              <span
+                className="text-white font-bold tracking-widest"
+                style={{ fontSize: 10, letterSpacing: 3 }}
+              >
+                akash1047
+              </span>
+            </div>
+            <nav className="flex-1 py-1" aria-label="Start menu navigation">
+              {NAV_ITEMS.map((item) => (
                 <a
+                  key={item.href}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block py-2 font-mono text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="win-menu-item flex items-center gap-2 text-[11px] py-1.5 px-3 hover:bg-primary hover:text-white block"
                 >
-                  <span className="text-primary/50">&gt; </span>
                   {item.label}
                 </a>
-              </li>
-            ))}
-          </ul>
+              ))}
+              <div style={{ borderTop: '1px solid #808080', borderBottom: '1px solid #ffffff', margin: '4px 0' }} />
+              <a
+                href="/AkashLohar.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="win-menu-item flex items-center gap-2 text-[11px] py-1.5 px-3 hover:bg-primary hover:text-white block"
+                onClick={() => setMenuOpen(false)}
+              >
+                Download Resume
+              </a>
+            </nav>
+          </div>
         </div>
-      </div>
-    </header>
+      )}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+    </>
   )
 }

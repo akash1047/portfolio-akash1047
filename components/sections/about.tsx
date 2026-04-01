@@ -1,6 +1,5 @@
 import { resume } from '@/data/resume'
 import { SectionWrapper, SectionLabel } from '@/components/layout/section-wrapper'
-import { AnimateOnScroll } from '@/components/shared/animate-on-scroll'
 
 const stats = [
   { value: '~2 yrs', label: 'Professional Exp.' },
@@ -11,44 +10,41 @@ const stats = [
 
 export function About() {
   return (
-    <SectionWrapper id="about" dim>
-      <AnimateOnScroll>
-        <SectionLabel>about.ts</SectionLabel>
-        <h2 className="text-3xl md:text-4xl font-bold mb-8">About Me</h2>
-      </AnimateOnScroll>
+    <SectionWrapper id="about" title="About Me - Profile Properties" dim>
+      <SectionLabel>about.txt</SectionLabel>
+      <h2 className="text-[14px] font-bold mb-4 text-[#000000]">About Me</h2>
 
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        <AnimateOnScroll delay={100}>
-          <p className="text-muted-foreground leading-relaxed mb-6">
-            {resume.bio}
-          </p>
-          <p className="text-muted-foreground leading-relaxed mb-6 text-sm">
-            I started my journey obsessing over how computers work at the lowest level — writing
-            bare-metal code, building operating system kernels, and implementing compilers from
-            scratch. That foundation shaped how I approach every problem: understand the system,
-            then build on top of it.
-          </p>
-          <p className="text-muted-foreground leading-relaxed text-sm">
+      <div className="grid md:grid-cols-2 gap-4 items-start">
+        <div>
+          <div className="win-sunken p-3 bg-white text-[11px] leading-relaxed text-[#000000] mb-3">
+            <p>{resume.bio}</p>
+          </div>
+          <div className="win-sunken p-3 bg-white text-[11px] leading-relaxed text-[#000000] mb-3">
+            <p>
+              Started obsessing over how computers work at the lowest level — writing bare-metal
+              code, building operating system kernels, and implementing compilers from scratch.
+            </p>
+          </div>
+          <p className="text-[11px] text-[#606060]">
             Open to relocation:{' '}
-            <span className="text-primary font-mono">
-              {resume.relocationPreference.join(' · ')}
+            <span className="text-[#000080] font-bold">
+              {resume.relocationPreference.join(' \u00B7 ')}
             </span>
           </p>
-        </AnimateOnScroll>
+        </div>
 
-        <AnimateOnScroll delay={200}>
-          <div className="grid grid-cols-2 gap-4">
+        {/* Stats as a Win2K group box grid */}
+        <div className="win-groupbox" style={{ position: 'relative' }}>
+          <span className="win-groupbox-label">System Info</span>
+          <div className="grid grid-cols-2 gap-2 mt-2">
             {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="p-5 rounded border border-border/60 bg-card hover:border-primary/30 transition-colors"
-              >
-                <p className="font-mono text-2xl font-bold text-primary mb-1">{stat.value}</p>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              <div key={stat.label} className="win-raised p-2 bg-[#d4d0c8] text-center">
+                <p className="text-[14px] font-bold text-[#000080]">{stat.value}</p>
+                <p className="text-[10px] text-[#606060]">{stat.label}</p>
               </div>
             ))}
           </div>
-        </AnimateOnScroll>
+        </div>
       </div>
     </SectionWrapper>
   )
